@@ -227,4 +227,43 @@ public class UserDao {
 			close(ps);
 		}
 	}
+
+	/*
+	* String型のaccountを引数にもつ、selectメソッドを追加する
+	*/
+	public User select(Connection connection, String account) {
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM users WHERE account = ?";
+
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, account);
+
+			ResultSet rs = ps.executeQuery();
+
+			List<User> users = toUsers(rs);
+
+			if (users.isEmpty()) {
+
+				// 新規アカウント作成時に通る場合nullを返却
+				return null;
+
+			} else if (2 <= users.size()) {
+
+				// ユーザ情報が2件以上の時例外返却（ほぼ想定外）
+				throw new IllegalStateException("ユーザーが重複しています");
+
+			} else {
+
+				// アカウント更新時に通る場合ユーザ情報を返却
+				return users.get(0);
+
+			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
 }

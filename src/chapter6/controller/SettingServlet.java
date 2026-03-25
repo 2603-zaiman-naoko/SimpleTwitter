@@ -111,6 +111,7 @@ public class SettingServlet extends HttpServlet {
 		String name = user.getName();
 		String account = user.getAccount();
 		String email = user.getEmail();
+		int id = user.getId();
 
 		if (!StringUtils.isEmpty(name) && (20 < name.length())) {
 			errorMessages.add("名前は20文字以下で入力してください");
@@ -124,6 +125,16 @@ public class SettingServlet extends HttpServlet {
 			errorMessages.add("メールアドレスを入力してください");
 		} else if (!StringUtils.isEmpty(email) && (50 < email.length())) {
 			errorMessages.add("メールアドレスは50文字以下で入力してください");
+		}
+
+		// 実践課題③
+		User selectUser = new UserService().select(account);
+
+		// アカウント新規作成時(nullの場合はアカウント更新あり)
+		if(selectUser != null && selectUser.getId() != id) {
+			// 返却されたユーザ情報のID(DB)と
+			// 登録したいid情報が一致した場合
+			errorMessages.add("すでに存在するアカウントです");
 		}
 
 		if (errorMessages.size() != 0) {
