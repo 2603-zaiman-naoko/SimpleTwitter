@@ -114,9 +114,9 @@ public class SignUpServlet extends HttpServlet {
 		}
 
 		// 実践課題③
-		User selectUser = new UserService().select(account);
+		User duplicationAccount = new UserService().select(account);
 
-		if(selectUser != null) {
+		if(duplicationAccount != null) {
 			errorMessages.add("すでに存在するアカウントです");
 		}
 

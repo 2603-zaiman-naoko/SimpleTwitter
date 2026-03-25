@@ -128,12 +128,10 @@ public class SettingServlet extends HttpServlet {
 		}
 
 		// 実践課題③
-		User selectUser = new UserService().select(account);
+		User duplicationAccount = new UserService().select(account);
 
 		// アカウント新規作成時(nullの場合はアカウント更新あり)
-		if(selectUser != null && selectUser.getId() != id) {
-			// 返却されたユーザ情報のID(DB)と
-			// 登録したいid情報が一致した場合
+		if(duplicationAccount != null && duplicationAccount.getId() != id) {
 			errorMessages.add("すでに存在するアカウントです");
 		}
 
