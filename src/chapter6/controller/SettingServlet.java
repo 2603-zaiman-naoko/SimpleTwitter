@@ -70,7 +70,7 @@ public class SettingServlet extends HttpServlet {
 			try {
 				new UserService().update(user);
 			} catch (NoRowsUpdatedRuntimeException e) {
-			log.warning("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
+				log.warning("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
 				errorMessages.add("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
 			}
 		}
@@ -88,7 +88,6 @@ public class SettingServlet extends HttpServlet {
 
 	private User getUser(HttpServletRequest request) throws IOException, ServletException {
 
-
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
@@ -103,7 +102,6 @@ public class SettingServlet extends HttpServlet {
 	}
 
 	private boolean isValid(User user, List<String> errorMessages) {
-
 
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 				" : " + new Object(){}.getClass().getEnclosingMethod().getName());
