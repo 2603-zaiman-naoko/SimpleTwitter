@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -42,11 +43,18 @@ public class EditServlet extends HttpServlet {
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
+		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
 		Message message = null;
 
 		String id = request.getParameter("message_id");
-		try {
+
+		// idの設定・数値チェック
+		if(StringUtils.isBlank(id) || !id.matches("^[0-9]*$")) {
+			log.warning("不正なパラメータが入力されました");
+			errorMessages.add("不正なパラメータが入力されました");
+		} else {
+
 			int messageId = Integer.parseInt(id);
 
 			message = new MessageService().select(messageId);
@@ -57,14 +65,11 @@ public class EditServlet extends HttpServlet {
 				log.warning("不正なパラメータが入力されました");
 				errorMessages.add("不正なパラメータが入力されました");
 			}
-		} catch (NumberFormatException  e) {
-			log.warning("不正なパラメータが入力されました");
-			errorMessages.add("不正なパラメータが入力されました");
 		}
 
 		if (errorMessages.size() != 0) {
-			request.setAttribute("errorMessages", errorMessages);
-			request.getRequestDispatcher("./").forward(request, response);
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
 			return;
 		}
 

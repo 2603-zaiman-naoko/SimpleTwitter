@@ -9,7 +9,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>簡易Twitter</title>
-		 <link href="./css/style.css" rel="stylesheet" type="text/css">
+		<link href="./css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
 		<div class="main-contents">
@@ -27,9 +27,9 @@
 
 			<c:if test="${ not empty loginUser }">
 				<div class="profile">
-				<div class="name"><h2><c:out value="${loginUser.name}" /></h2></div>
-				<div class="account">@<c:out value="${loginUser.account}" /></div>
-				<div class="description"><c:out value="${loginUser.description}" /></div>
+					<div class="name"><h2><c:out value="${loginUser.name}" /></h2></div>
+					<div class="account">@<c:out value="${loginUser.account}" /></div>
+					<div class="description"><c:out value="${loginUser.description}" /></div>
 				</div>
 			</c:if>
 
@@ -47,7 +47,6 @@
 			<form action="edit" method="post">
 				<textarea name="text" cols="100" rows="5" class="tweet-box">${message.text}</textarea><br />
 				<input type="hidden" name="message_id" value = "${message.id}">
-				<input type="hidden" name="text" value = "${message.text}">
 				<input type="submit" value="更新" >（140文字まで）
 			</form>
 		</div>
