@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UserComment implements Serializable {
-	private String name;
-	private String account;
 
 	private int id;
 	private String text;
 	private int userId;
 	private int messageId;
+	private String name;
+	private String account;
 	private Date createdDate;
 	private Date updatedDate;
 
