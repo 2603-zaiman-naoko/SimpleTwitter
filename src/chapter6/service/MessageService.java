@@ -4,6 +4,8 @@ import static chapter6.utils.CloseableUtil.*;
 import static chapter6.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +60,7 @@ public class MessageService {
 	}
 
 	// 実践課題②
-	public List<UserMessage> select(String userId) {
+	public List<UserMessage> select(String userId, String startDate, String endDate) {
 
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -68,6 +70,38 @@ public class MessageService {
 		Connection connection = null;
 		try {
 			connection = getConnection();
+
+			// 日付入力チェック
+			// 開始日が設定されている場合
+			if (!StringUtils.isBlank(startDate)) {
+
+				// startDateに指定した年月日+00:00:00を設定
+				startDate = startDate + " 00:00:00";
+			} else {
+
+				// startDateにデフォルト年月日+00:00:00を設定
+				startDate = "2020/01/01 00:00:00";
+			}
+
+			// 終了日が設定されている場合
+			if (!StringUtils.isBlank(endDate)) {
+
+				// endDateに指定した年月日+23:59:59を設定
+				endDate = endDate + " 23:59:59";
+			} else {
+
+				// Calendarのインスタンスを生成
+				Calendar cl = Calendar.getInstance();
+
+				// SimpleDateFormatでフォーマットの成型
+				SimpleDateFormat nowDate = new SimpleDateFormat("yyyy/MM/dd");
+
+				// 現日時を取得
+				String defaultEndDate = nowDate.format(cl.getTime());
+
+				// startDateにデフォルト年月日+00:00:00を設定
+				endDate = defaultEndDate + " 23:59:59";
+			}
 
 			/*
 			* idをnullで初期化
@@ -84,7 +118,8 @@ public class MessageService {
 			* idがnullだったら全件取得する
 			* idがnull以外だったら、その値に対応するユーザーIDの投稿を取得する
 			*/
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
+			// 絞り込み日付の引数追加
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, startDate, endDate, LIMIT_NUM);
 			commit(connection);
 
 			return messages;

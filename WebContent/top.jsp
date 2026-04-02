@@ -26,9 +26,9 @@
 
 			<c:if test="${ not empty loginUser }">
 				<div class="profile">
-				<div class="name"><h2><c:out value="${loginUser.name}" /></h2></div>
-				<div class="account">@<c:out value="${loginUser.account}" /></div>
-				<div class="description"><c:out value="${loginUser.description}" /></div>
+					<div class="name"><h2><c:out value="${loginUser.name}" /></h2></div>
+					<div class="account">@<c:out value="${loginUser.account}" /></div>
+					<div class="description"><c:out value="${loginUser.description}" /></div>
 				</div>
 			</c:if>
 
@@ -42,6 +42,12 @@
 				</div>
 				<c:remove var="errorMessages" scope="session" />
 			</c:if>
+
+			<!-- 絞り込みフォームの追加 -->
+			<form action="./" method="get">
+				（日付）<input type="date" name="start" value="${start}"> ～ <input type="date" name="end" value="${end}">
+				<input type="submit" value="絞込">
+			</form>
 
 			<div class="form-area">
 				<c:if test="${ isShowMessageForm }">
@@ -67,7 +73,7 @@
 
 							<span class="name"><c:out value="${message.name}" /></span>
 						</div>
-			   			<div class="text"><pre><c:out value="${message.text}" /></pre></div>
+						<div class="text"><pre><c:out value="${message.text}" /></pre></div>
 						<div class="date"><fmt:formatDate value="${message.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 
 						<!-- 仕様追加（削除） -->
@@ -82,6 +88,37 @@
 							<form action="deleteMessage" method="post">
 								<input type="hidden" name="message_id" value = "${message.id}">
 								<input type="submit" value="削除" >
+							</form>
+						</c:if>
+
+						<!-- 仕様追加（返信内容の表示） -->
+						<!-- servletから受け取ったcommentsをcomennt変数に入れて繰り返す -->
+						<c:forEach items="${comments}" var="comment">
+
+							<!-- message.id == comennt.message_idの場合表示させる-->
+							<c:if test="${message.id == comment.messageId}">
+								<div class="account-name">
+									<span class="account">
+										<a href="./?user_id=<c:out value="${comment.userId}"/> ">
+											<c:out value="${comment.account}" />
+										</a>
+									</span>
+
+									<span class="name"><c:out value="${comment.name}" /></span>
+								</div>
+								<div class="text"><pre><c:out value="${comment.text}" /></pre></div>
+								<div class="date"><fmt:formatDate value="${comment.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
+							</c:if>
+						</c:forEach>
+
+						<!-- 仕様追加（返信） -->
+						<!-- ログインしているユーザーのみ返信可能 -->
+						<c:if test="${ not empty loginUser }">
+							<form action="comment" method="post">
+								返信<br />
+								<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea><br />
+								<input type="hidden" name="message_id" value = "${message.id}">
+								<input type="submit" value="返信" >（140文字まで）
 							</form>
 						</c:if>
 
