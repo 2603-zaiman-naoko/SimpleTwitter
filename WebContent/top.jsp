@@ -99,9 +99,7 @@
 							<c:if test="${message.id == comment.messageId}">
 								<div class="account-name">
 									<span class="account">
-										<a href="./?user_id=<c:out value="${comment.userId}"/> ">
-											<c:out value="${comment.account}" />
-										</a>
+										<c:out value="${comment.account}" />
 									</span>
 
 									<span class="name"><c:out value="${comment.name}" /></span>

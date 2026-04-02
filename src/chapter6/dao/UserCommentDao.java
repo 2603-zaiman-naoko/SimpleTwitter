@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import chapter6.beans.Comment;
+import chapter6.beans.UserComment;
 import chapter6.exception.SQLRuntimeException;
 import chapter6.logging.InitApplication;
 
@@ -31,7 +31,7 @@ public class UserCommentDao {
 		application.init();
 	}
 
-	public List<Comment> select(Connection connection, int num) {
+	public List<UserComment> select(Connection connection, int num) {
 
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -57,8 +57,8 @@ public class UserCommentDao {
 			ResultSet rs = ps.executeQuery();
 
 			// 取得した情報設定メソッドを呼び出す
-			List<Comment> comments = toComments(rs);
-			return comments;
+			List<UserComment> userComments = toUserComments(rs);
+			return userComments;
 
 		} catch (SQLException e) {
 			log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
@@ -68,26 +68,26 @@ public class UserCommentDao {
 		}
 	}
 
-	private List<Comment> toComments(ResultSet rs) throws SQLException {
+	private List<UserComment> toUserComments(ResultSet rs) throws SQLException {
 
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
-		List<Comment> comments = new ArrayList<Comment>();
+		List<UserComment> userComments = new ArrayList<UserComment>();
 		try {
 			while (rs.next()) {
-				Comment comment = new Comment();
-				comment.setId(rs.getInt("id"));
-				comment.setText(rs.getString("text"));
-				comment.setUserId(rs.getInt("user_id"));
-				comment.setMessageId(rs.getInt("message_id"));
-				comment.setAccount(rs.getString("account"));
-				comment.setName(rs.getString("name"));
-				comment.setCreatedDate(rs.getTimestamp("created_date"));
+				UserComment userComment = new UserComment();
+				userComment.setId(rs.getInt("id"));
+				userComment.setText(rs.getString("text"));
+				userComment.setUserId(rs.getInt("user_id"));
+				userComment.setMessageId(rs.getInt("message_id"));
+				userComment.setAccount(rs.getString("account"));
+				userComment.setName(rs.getString("name"));
+				userComment.setCreatedDate(rs.getTimestamp("created_date"));
 
-				comments.add(comment);
+				userComments.add(userComment);
 			}
-			return comments;
+			return userComments;
 		} finally {
 			close(rs);
 		}

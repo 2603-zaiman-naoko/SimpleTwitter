@@ -57,36 +57,23 @@ public class CommentServlet  extends HttpServlet {
 		// beansのインスタンスを生成する
 		Comment comment = new Comment();
 
-		// idの設定・数値チェック
-		if(StringUtils.isBlank(id) || !id.matches("^[0-9]*$")) {
-			log.warning("不正なパラメータが入力されました");
-			errorMessages.add("不正なパラメータが入力されました");
-		} else {
-
-			// バリデーションチェック
-			if (!isValid(commentText, errorMessages)) {
-				session.setAttribute("errorMessages", errorMessages);
-				response.sendRedirect("./");
-				return;
-			}
-
-			// message_idをint型に変換
-			int messageId = Integer.parseInt(id);
-
-			// beansに設定する
-			comment.setText(commentText);
-			comment.setUserId(user.getId());
-			comment.setMessageId(messageId);
-
-			// Serviceのinsertを呼び出す
-			new CommentService().insert(comment);
-		}
-
-		if (errorMessages.size() != 0) {
+		// バリデーションチェック
+		if (!isValid(commentText, errorMessages)) {
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
 			return;
 		}
+
+		// message_idをint型に変換
+		int messageId = Integer.parseInt(id);
+
+		// beansに設定する
+		comment.setText(commentText);
+		comment.setUserId(user.getId());
+		comment.setMessageId(messageId);
+
+		// Serviceのinsertを呼び出す
+		new CommentService().insert(comment);
 
 		// top画面に戻す
 		response.sendRedirect("./");
