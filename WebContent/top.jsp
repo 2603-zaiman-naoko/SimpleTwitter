@@ -6,6 +6,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
+		<!-- jQueryファイルの追加 -->
+ 		<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="${pageContext.request.contextPath}/css/top.js"></script>
+
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>簡易Twitter</title>
 		 <link href="./css/style.css" rel="stylesheet" type="text/css">
@@ -87,7 +91,7 @@
 
 							<form action="deleteMessage" method="post">
 								<input type="hidden" name="message_id" value = "${message.id}">
-								<input type="submit" value="削除" >
+								<input id="deleteid" type="submit" value="削除" >
 							</form>
 						</c:if>
 
